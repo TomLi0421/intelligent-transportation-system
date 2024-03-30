@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { generateDummyData } from "../data/CHART_DATA";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -21,48 +22,26 @@ ChartJS.register(
   Legend
 );
 
-function LineChart() {
-  const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "Sales for 2023 (M)",
-        data: [3, 2, 2, 1, 5, 4],
-        fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)",
-        tension: 0.5, // This adds some "curve" to the line
-      },
-      {
-        label: "Sales for 2023 (M)",
-        data: [4, 2, 9, 1, 5, 4],
-        fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)",
-        tension: 0.5, // This adds some "curve" to the line
-      },
-    ],
-  };
+function LineChart({ dummy_chartData }) {
+  const [chartData, setChartData] = useState(generateDummyData(10, 1));
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: "Sales Data",
-      },
-    },
-  };
+  useEffect(() => {}, []);
 
-  return (
-    <>
-      <h2 className="text-2xl font-medium"></h2>
-      <Line options={options} data={data} />
-    </>
-  );
+  const colors = [
+    "#FF0000",
+    "#00FF00",
+    "#0000FF",
+    "#FFFF00",
+    "#FF00FF",
+    "#00FFFF",
+    "#000000",
+    "#800000",
+    "#008000",
+    "#000080",
+  ];
+  return <>{/* <Line options={options} data={data} /> */}</>;
 }
 
 export default LineChart;
+
+// text: "Real time driving Speed Monitoring",
