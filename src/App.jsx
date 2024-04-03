@@ -5,6 +5,8 @@ import OverSpeedHistory from "./components/OverSpeedHistoryCard";
 import summaryData from "./data/SUMMARY_DATA";
 import dummy_chartData from "./data/CHART_DATA";
 
+import Test from "./components/Test"; // tesing, delete later
+
 function App() {
   return (
     <div className="px-10 pt-12">
@@ -20,6 +22,7 @@ function App() {
           <OverSpeedHistory />
         </div>
       </div>
+      <Test /> {/* just for testng, delete later */}
     </div>
   );
 }
