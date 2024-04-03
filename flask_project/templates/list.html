@@ -1,0 +1,36 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Show Student Information</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+   <body>
+
+      <h2>Student Information List</h2>
+      <table border=1 style="margin:5% 0 0 15%">
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>ID</th>
+               <th>Department</th>
+               <th>Email</th>
+            </tr>            
+         </thead>
+         <tbody>
+            {% for result in results %}
+            <tr>
+               <td>{{result[0]}}</td>
+               <td>{{result[1]}}</td>
+               <td>{{result[2]}}</td>
+               <td>{{result[3]}}</td>    
+            </tr>
+         {% endfor %}
+         </tbody>
+         
+      </table>
+
+      <h2><a href = "/">Back Home</a></h2>
+
+
+   </body>
+</html>

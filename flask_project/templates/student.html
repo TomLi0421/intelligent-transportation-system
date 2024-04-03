@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Student Information Collection</title>
+<link rel="stylesheet" type="text/css" href="../static/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+
+</head>
+   <body>
+
+      <form action = "{{ url_for('addrec') }}" method = "POST">
+      	 <h2>Student Information</h2>
+         <p style="text-align:right; margin:0 35% 0 0">Name <input type = "text" name = "Name" /></p>
+         <p style="text-align:right; margin:0 35% 0 0">ID: <input type = "text" name = "ID" /></p>
+         <p style="text-align:right; margin:0 35% 0 0">Department: <input type = "text" name = "Department" /></p>
+         <p style="text-align:right; margin:0 35% 0 0">Email: <input type = "text" name = "Email" /></p>
+         <p><input type = "submit" value = "Submit" /></p>
+      </form>
+
+
+   </body>
+</html>
