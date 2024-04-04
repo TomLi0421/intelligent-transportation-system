@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Display</title>
+    <style>
+        /* Set the container to have a max-width and center it horizontally */
+        #json-container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <pre id="json-container"></pre>
+
+    <script>
+        // Access the JSON data passed from Flask
+        var jsonData = JSON.parse('{{ json_data|safe }}');
+
+        // Convert the JSON data to a string
+        var jsonString = JSON.stringify(jsonData, null, 2); // Use null and 2 for pretty formatting
+
+        // Get the container element
+        var container = document.getElementById('json-container');
+
+        // Set the JSON string as the content of the container
+        container.textContent = jsonString;
+    </script>
+</body>
+</html>
