@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask.json import JSONEncoder
+from flask_cors import CORS, cross_origin
 from datetime import datetime, timedelta
 from decimal import Decimal
 import threading
@@ -8,6 +9,7 @@ import mysql.connector
 import json
 
 application = Flask(__name__, static_url_path='/static')
+CORS(application)
 #app = Flask(__name__)
 
 class CustomJSONEncoder(JSONEncoder):
