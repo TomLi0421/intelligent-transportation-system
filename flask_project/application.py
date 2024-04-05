@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify
-from datetime import datetime
+from datetime import datetime, timedelta
+import threading
+import time
 import mysql.connector
 import json
 
@@ -40,14 +42,25 @@ def db_connection():
 	
 	return mydb
 
+# Declare start_datetime and end_datetime as global variables
+start_datetime = datetime.strptime("2017-01-01 08:00:00", "%Y-%m-%d %H:%M:%S")
+end_datetime = start_datetime + timedelta(seconds=30)
+
+def update_datetime():
+    global start_datetime, end_datetime
+    while True:
+        start_datetime += timedelta(seconds=31)
+        end_datetime += timedelta(seconds=31)
+        time.sleep(30)
+
+# Start the update_datetime function in a separate thread
+update_thread = threading.Thread(target=update_datetime)
+update_thread.daemon = True
+update_thread.start()
+
 @application.route('/car_speed_monitor', methods=['GET'])
 def car_speed_monitor():
-    mydb = db_connection()
-    cur = mydb.cursor()
-
-    # Convert time strings to datetime objects
-    start_datetime = "2017-01-01 08:00:05"
-    end_datetime = "2017-01-01 08:00:30"
+    global start_datetime, end_datetime
 
     mydb = db_connection()
     cur = mydb.cursor()
@@ -58,7 +71,7 @@ def car_speed_monitor():
         ORDER BY CurrentTime
     '''
 
-    cur.execute(sql_query, (start_datetime, end_datetime))
+    cur.execute(sql_query, (start_datetime.strftime("%Y-%m-%d %H:%M:%S"), end_datetime.strftime("%Y-%m-%d %H:%M:%S")))
     myresult = cur.fetchall()
     json_list = []
 
@@ -73,6 +86,7 @@ def car_speed_monitor():
         json_list.append(data_dict)
 
     mydb.close()
+
     return jsonify(json_list)
 
 @application.route('/summary', methods=['GET'])
