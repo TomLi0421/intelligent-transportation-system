@@ -49,8 +49,8 @@ end_datetime = start_datetime + timedelta(seconds=30)
 def update_datetime():
     global start_datetime, end_datetime
     while True:
-        start_datetime += timedelta(seconds=31)
-        end_datetime += timedelta(seconds=31)
+        start_datetime += timedelta(seconds=30)
+        end_datetime += timedelta(seconds=30)
         time.sleep(30)
 
 # Start the update_datetime function in a separate thread
