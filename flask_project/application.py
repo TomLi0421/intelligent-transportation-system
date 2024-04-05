@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
+from datetime import datetime
 import mysql.connector
 import json
-from decimal import Decimal
 
 application = Flask(__name__, static_url_path='/static')
 #app = Flask(__name__)
@@ -40,124 +40,116 @@ def db_connection():
 	
 	return mydb
 
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, Decimal):
-            return float(o)
-        return super(DecimalEncoder, self).default(o)
+@application.route('/car_speed_monitor', methods=['GET'])
+def car_speed_monitor():
+    mydb = db_connection()
+    cur = mydb.cursor()
 
-@application.route('/summary')
+    # Convert time strings to datetime objects
+    start_datetime = "2017-01-01 08:00:05"
+    end_datetime = "2017-01-01 08:00:30"
+
+    mydb = db_connection()
+    cur = mydb.cursor()
+
+    sql_query = '''
+        SELECT * FROM comp4442.DriverSpeedData
+        WHERE CurrentTime BETWEEN %s AND %s
+        ORDER BY CurrentTime
+    '''
+
+    cur.execute(sql_query, (start_datetime, end_datetime))
+    myresult = cur.fetchall()
+    json_list = []
+
+    for result in myresult:
+        data_dict = {
+            "ID": result[0],
+            "DriverID": result[1],
+            "CurrentTime": result[2],
+            "Speed": result[3],
+            "IsOverspeed": result[4]
+        }
+        json_list.append(data_dict)
+
+    mydb.close()
+    return jsonify(json_list)
+
+@application.route('/summary', methods=['GET'])
 def summary():
-	mydb = db_connection()
-	cur = mydb.cursor()
-	sql_query = "SELECT ds.driverId, \
-    				ROUND(AVG(dsd.Speed), 1) AS `AVG Speed`, \
-					COUNT(dsd.isOverspeed) AS `Overspeed`, \
-					ds.carPlateNumber, \
-					ds.overspeedCount, \
-					ds.overspeedTotalTime, \
-					ds.fatigueDrivingCount, \
-					ds.oilLeakDrivingCount, \
-					ds.hthrottleStopCount, \
-					ds.neutralSlide_totalTime \
-				FROM \
-					comp4442.DriverSpeedData dsd \
-				JOIN \
-					comp4442.DriverStats ds ON ds.driverId = dsd.driverId \
-				GROUP BY \
-					ds.driverId, \
-					ds.carPlateNumber, \
-					ds.overspeedCount, \
-					ds.overspeedTotalTime, \
-					ds.fatigueDrivingCount, \
-					ds.oilLeakDrivingCount, \
-					ds.hthrottleStopCount, \
-					ds.neutralSlide_totalTime" 
-	
-	cur.execute(sql_query)
-	
-	myresult = cur.fetchall()
-	json_list = []  # Create an empty list to hold the data dictionaries
+    mydb = db_connection()
+    cur = mydb.cursor()
+    sql_query = "select ds.driverId, \
+                    ROUND(AVG(dsd.Speed), 1) AS `AVG Speed`, \
+                    COUNT(dsd.isOverspeed) AS `Overspeed`, \
+                    ds.carPlateNumber, \
+                    ds.overspeedCount, \
+                    ds.overspeedTotalTime, \
+                    ds.fatigueDrivingCount, \
+                    ds.oilLeakDrivingCount, \
+                    ds.hthrottleStopCount, \
+                    ds.neutralSlide_totalTime \
+                from \
+                    comp4442.DriverSpeedData dsd \
+                join \
+                    comp4442.DriverStats ds ON ds.driverId = dsd.driverId \
+                group by \
+                    ds.driverId, \
+                    ds.carPlateNumber, \
+                    ds.overspeedCount, \
+                    ds.overspeedTotalTime, \
+                    ds.fatigueDrivingCount, \
+                    ds.oilLeakDrivingCount, \
+                    ds.hthrottleStopCount, \
+                    ds.neutralSlide_totalTime" 
+    
+    cur.execute(sql_query)
+    
+    myresult = cur.fetchall()
+    json_list = []  # Create an empty list to hold the data dictionaries
 
-	for result in myresult:
-		data_dict = {
-			"driverId": result[0],
-			"avgSpeed": result[1],
-			"overspeed": result[2],
-			"carPlateNumber": result[3],
-			"overspeedCount": result[4],
-			"overspeedTotalTime": result[5],
-			"fatigueDrivingCount": result[6],
-			"oilLeakDrivingCount": result[7],
-			"hthrottleStopCount": result[8],
-			"neutralSlide_totalTime": result[9]
-		}
-		json_list.append(data_dict)  # Append each data dictionary to the list
-	
-	json_data = json.dumps(json_list, cls=DecimalEncoder) # Convert the list to a JSON string
+    for result in myresult:
+        data_dict = {
+            "driverId": result[0],
+            "avgSpeed": result[1],
+            "overspeed": result[2],
+            "carPlateNumber": result[3],
+            "overspeedCount": result[4],
+            "overspeedTotalTime": result[5],
+            "fatigueDrivingCount": result[6],
+            "oilLeakDrivingCount": result[7],
+            "hthrottleStopCount": result[8],
+            "neutralSlide_totalTime": result[9]
+        }
+        json_list.append(data_dict)  # Append each data dictionary to the list
+    
+    return jsonify(json_list)
 
-	return render_template("json.html", json_data=json_data)
-
-
-@application.route('/car_speed_monitor')
-def list():
-	mydb = db_connection()
-	cur = mydb.cursor()
-	
-	sql_query = '''
-					SELECT DriverID, DATE(CurrentTime) AS `Date`, ROUND(AVG(Speed), 1) AS `AVG Speed`
-	 				FROM comp4442.DriverSpeedData
-	 				GROUP BY DriverID, DATE(CurrentTime)
-	 				ORDER BY DriverID, Date
-				'''
-	
-	cur.execute(sql_query)
-
-	myresult = cur.fetchall()
-
-	json_list = []  # Create an empty list to hold the data dictionaries
-	
-	for result in myresult:
-		data_dict = {
-			"driverId": result[0],
-			"date": result[1].strftime('%Y-%m-%d'),
-			"speed": result[2]
-		}
-		json_list.append(data_dict)
-		
-	json_data = json.dumps(json_list, cls=DecimalEncoder)  # Convert the list to a JSON string
-
-	return render_template("json.html", json_data=json_data)
-
-
-@application.route('/overspeed_history')
+@application.route('/overspeed_history', methods=['GET'])
 def overspeed_history():
-	mydb = db_connection()
-	cur = mydb.cursor()
-	
-	sql_query = '''
-					select * from comp4442.DriverSpeedData where IsOverspeed = 1
-					order by DriverID, CurrentTime
-				'''
-	
-	cur.execute(sql_query)
+    mydb = db_connection()
+    cur = mydb.cursor()
+    
+    sql_query = '''
+                    select * from comp4442.DriverSpeedData where IsOverspeed = 1
+                    order by DriverID, CurrentTime
+                '''
+    
+    cur.execute(sql_query)
 
-	myresult = cur.fetchall()
+    myresult = cur.fetchall()
 
-	json_list = []  # Create an empty list to hold the data dictionaries
-	
-	for result in myresult:
-		data_dict = {
-			"driverId": result[1],
-			"date": result[2].strftime('%Y-%m-%d %H:%M:%S'),
-			"speed": result[3]
-		}
-		json_list.append(data_dict)
-		
-	json_data = json.dumps(json_list, cls=DecimalEncoder)  # Convert the list to a JSON string
-
-	return render_template("json.html", json_data=json_data)
-
+    json_list = []  # Create an empty list to hold the data dictionaries
+    
+    for result in myresult:
+        data_dict = {
+            "driverId": result[1],
+            "date": result[2].strftime('%Y-%m-%d %H:%M:%S'),
+            "speed": result[3]
+        }
+        json_list.append(data_dict)
+        
+    return jsonify(json_list)
 
 if __name__ == '__main__':
 	application.run(port=5000, debug = True)
