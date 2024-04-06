@@ -27,7 +27,7 @@ export default function BasicTable() {
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg col-span-3">
+    <div className="bg-white p-8 rounded-lg sm:col-span-3">
       <h2 className="font-medium text-xl mb-5">Driver Behaviour Summary</h2>
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center" }}>

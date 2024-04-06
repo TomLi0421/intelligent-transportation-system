@@ -46,7 +46,7 @@ function App() {
         )}
       </div>
 
-      <div className="sm:grid sm:grid-cols-4 sm:gap-x-10 mt-10">
+      <div className="grid gap-x-10 mt-10 grid-cols-1 sm:grid-cols-4">
         <DriverTable />
         <div className="bg-white p-8 rounded-lg mt-10 sm:mt-0">
           <h2 className="font-medium text-xl mb-5">Overspeed History</h2>
