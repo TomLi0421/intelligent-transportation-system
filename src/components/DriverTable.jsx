@@ -52,7 +52,7 @@ export default function BasicTable() {
                 <TableCell>Driver id</TableCell>
                 <TableCell>Car plate number</TableCell>
                 <TableCell>Cumulative number of overspeed</TableCell>
-                <TableCell>Cumulative total time of overspeed (s)</TableCell>
+                <TableCell>Cumulative total time of overspeed (mins)</TableCell>
                 <TableCell>Fatigue driving count</TableCell>
                 <TableCell>Throttle stop count</TableCell>
                 <TableCell>Oil leak count</TableCell>
@@ -84,11 +84,15 @@ export default function BasicTable() {
                   <TableCell>{driver.driverId}</TableCell>
                   <TableCell>{driver.carPlateNumber}</TableCell>
                   <TableCell>{driver.overspeedCount}</TableCell>
-                  <TableCell>{driver.overspeedTotalTime}</TableCell>
+                  <TableCell>
+                    {(driver.overspeedTotalTime / 60).toFixed(2)}
+                  </TableCell>
                   <TableCell>{driver.fatigueDrivingCount}</TableCell>
                   <TableCell>{driver.hthrottleStopCount}</TableCell>
                   <TableCell>{driver.oilLeakDrivingCount}</TableCell>
-                  <TableCell>{driver.neutralSlide_totalTime}</TableCell>
+                  <TableCell>
+                    {(driver.neutralSlide_totalTime / 60).toFixed(2)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
