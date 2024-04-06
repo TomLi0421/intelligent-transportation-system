@@ -72,6 +72,8 @@ def summary():
                     comp4442.DriverSpeedData dsd \
                 join \
                     comp4442.DriverStats ds ON ds.driverId = dsd.driverId \
+		where \
+		    ds.driverId <> '' \
                 group by \
                     ds.driverId, \
                     ds.carPlateNumber, \
