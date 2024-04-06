@@ -1,47 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { generateDummyData } from "../data/CHART_DATA";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-function LineChart({ dummy_chartData }) {
-  const [chartData, setChartData] = useState(generateDummyData(10, 1));
-
-  useEffect(() => {}, []);
-
-  const colors = [
-    "#FF0000",
-    "#00FF00",
-    "#0000FF",
-    "#FFFF00",
-    "#FF00FF",
-    "#00FFFF",
-    "#000000",
-    "#800000",
-    "#008000",
-    "#000080",
-  ];
-  return <>{/* <Line options={options} data={data} /> */}</>;
+function LineChart() {
+  const options = {
+    title: null,
+    series: [
+      {
+        data: [1, 2, 3],
+      },
+      {
+        data: [5, 4, 6],
+      },
+    ],
+  };
+  return (
+    <div className="bg-white p-8 rounded-lg col-span-2">
+      <h2 className="font-medium text-xl mb-5">
+        Real Time Driving Speed Monitoring
+      </h2>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </div>
+  );
 }
 
 export default LineChart;
-
-// text: "Real time driving Speed Monitoring",
