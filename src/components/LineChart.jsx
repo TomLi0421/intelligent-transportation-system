@@ -1,27 +1,44 @@
-import React, { useState, useEffect } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-function LineChart() {
-  const options = {
+function LineChart({ driverData }) {
+  let seriesData = [];
+
+  for (let i = 0; i < 10; i++) {
+    const driverSpeedData = driverData
+      .filter((driver) => driver.DriverID === driverData[i].DriverID)
+      .map((driver) => [new Date(driver.CurrentTime).getTime(), driver.Speed]);
+
+    const driverID = driverData[i].DriverID;
+    seriesData.push({ type: "spline", name: driverID, data: driverSpeedData });
+  }
+
+  const minAndMaxTime = driverData
+    .filter((driver) => driver.DriverID === driverData[0].DriverID)
+    .map((driver) => new Date(driver.CurrentTime).getTime());
+
+  const minTime = Math.min(...minAndMaxTime.map((data) => data));
+  const maxTime = Math.max(...minAndMaxTime.map((data) => data));
+
+  let options = {
     title: null,
-    series: [
-      {
-        data: [1, 2, 3],
+    xAxis: {
+      type: "datetime",
+      min: minTime,
+      max: maxTime,
+      title: {
+        text: "Time",
       },
-      {
-        data: [5, 4, 6],
+    },
+    yAxis: {
+      title: {
+        text: "Driving Speed (km/h)",
       },
-    ],
+    },
+    series: [...seriesData],
   };
-  return (
-    <div className="bg-white p-8 rounded-lg col-span-2">
-      <h2 className="font-medium text-xl mb-5">
-        Real Time Driving Speed Monitoring
-      </h2>
-      <HighchartsReact highcharts={Highcharts} options={options} />
-    </div>
-  );
+
+  return <HighchartsReact highcharts={Highcharts} options={options} />;
 }
 
 export default LineChart;
