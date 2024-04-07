@@ -19,6 +19,7 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACADEMY_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_ACADEMY_SECRET_ACCESS_KEY }}
+          aws_session_token: ${{ secrets.AWS_ACADEMY_SESSION_TOKEN }}
           application_name: Intelligent-transportation-system
           environment_name: Intelligent-transportation-syste-env
           version_label: ${{ github.sha }}
