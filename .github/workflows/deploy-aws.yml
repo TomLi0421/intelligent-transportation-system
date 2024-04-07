@@ -22,6 +22,6 @@ jobs:
           application_name: Intelligent-transportation-system
           environment_name: Intelligent-transportation-syste-env
           version_label: ${{ github.sha }}
-          existing_bucket_name: elasticbeanstalk-us-east-1-339713079221
+          existing_bucket_name: intelligent-transportation-system
           region: us-east-1
           deployment_package: deploy.zip
