@@ -21,7 +21,7 @@ function OverspeedHistoryList({ driverData }) {
   }
 
   return (
-    <>
+    <div className="overflow-auto max-h-[38rem]">
       {overspeedData.map((driver, index) => (
         <OverspeedHistoryCard
           key={index}
@@ -31,7 +31,7 @@ function OverspeedHistoryList({ driverData }) {
         />
       ))}
       <ToastContainer />
-    </>
+    </div>
   );
 }
 
