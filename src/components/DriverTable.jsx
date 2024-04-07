@@ -19,7 +19,7 @@ export default function BasicTable() {
 
   const getDriverData = async () => {
     const response = await axios.get(
-      "http://comp4442-project-env.eba-kzdmamxf.us-east-1.elasticbeanstalk.com/summary"
+      "https://comp4442-project-env.eba-kzdmamxf.us-east-1.elasticbeanstalk.com/summary"
     );
 
     setDriverData(response.data);

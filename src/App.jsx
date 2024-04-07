@@ -20,7 +20,7 @@ function App() {
 
   const getDriverData = async () => {
     const response = await axios(
-      "http://comp4442-project-env.eba-kzdmamxf.us-east-1.elasticbeanstalk.com/car_speed_monitor"
+      "https://comp4442-project-env.eba-kzdmamxf.us-east-1.elasticbeanstalk.com/car_speed_monitor"
     );
 
     setDriverData(response.data);
