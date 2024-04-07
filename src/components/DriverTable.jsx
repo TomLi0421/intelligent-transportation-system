@@ -27,7 +27,7 @@ export default function BasicTable() {
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg sm:col-span-3">
+    <div className="bg-white p-8 rounded-lg xl:col-span-3">
       <h2 className="font-medium text-xl mb-5">Driver Behaviour Summary</h2>
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -51,6 +51,7 @@ export default function BasicTable() {
                 <TableCell>#</TableCell>
                 <TableCell>Driver id</TableCell>
                 <TableCell>Car plate number</TableCell>
+                <TableCell>Average speed (km/h)</TableCell>
                 <TableCell>Cumulative number of overspeed</TableCell>
                 <TableCell>Cumulative total time of overspeed (mins)</TableCell>
                 <TableCell>Fatigue driving count</TableCell>
@@ -83,6 +84,7 @@ export default function BasicTable() {
                   </TableCell>
                   <TableCell>{driver.driverId}</TableCell>
                   <TableCell>{driver.carPlateNumber}</TableCell>
+                  <TableCell>{driver.avgSpeed}</TableCell>
                   <TableCell>{driver.overspeedCount}</TableCell>
                   <TableCell>
                     {(driver.overspeedTotalTime / 60).toFixed(2)}
