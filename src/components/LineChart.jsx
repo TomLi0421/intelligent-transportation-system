@@ -24,8 +24,6 @@ function LineChart({ driverData }) {
     }
   }
 
-  console.log(seriesData);
-
   const minAndMaxTime = driverData
     .filter((driver) => driver.DriverID === driverData[0].DriverID)
     .map((driver) => new Date(driver.CurrentTime).getTime());
