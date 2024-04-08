@@ -1,8 +1,27 @@
-# React + Vite
+# Getting started
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Installing the Application
 
-Currently, two official plugins are available:
+To install the application, follow these steps:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Clone the repository:
+   `git clone https://github.com/TomLi0421/intelligent-transportation-system.git`
+2. Navigate to the project directory:
+   `cd`
+3. Install the dependencies:
+   `npm install`
+
+## Running the Application
+
+To start the application, you can run the following command in the project directory:
+`npm run dev`
+
+This will start the development server. You can open [http://localhost:5173](http://localhost:5173) to view the application in the browser. The page will reload if you make edits.
+
+## Tech stack
+
+- JavaScript
+- Tailwind CSS
+- React
+- Flask
+- AWS Amplify
