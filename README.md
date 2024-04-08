@@ -7,7 +7,7 @@ To install the application, follow these steps:
 1. Clone the repository:
    `git clone https://github.com/TomLi0421/intelligent-transportation-system.git`
 2. Navigate to the project directory:
-   `cd`
+   `cd intelligent-transportation-system`
 3. Install the dependencies:
    `npm install`
 
