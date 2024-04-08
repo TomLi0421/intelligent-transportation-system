@@ -3,15 +3,28 @@ import HighchartsReact from "highcharts-react-official";
 
 function LineChart({ driverData }) {
   let seriesData = [];
+  let driverSet = new Set();
 
-  for (let i = 0; i < 10; i++) {
-    const driverSpeedData = driverData
-      .filter((driver) => driver.DriverID === driverData[i].DriverID)
-      .map((driver) => [new Date(driver.CurrentTime).getTime(), driver.Speed]);
+  for (let i = 0; i < driverData.length; i++) {
+    if (!driverSet.has(driverData[i].DriverID)) {
+      driverSet.add(driverData[i].DriverID);
 
-    const driverID = driverData[i].DriverID;
-    seriesData.push({ type: "spline", name: driverID, data: driverSpeedData });
+      const driverSpeedData = driverData
+        .filter((driver) => driver.DriverID === driverData[i].DriverID)
+        .map((driver) => [
+          new Date(driver.CurrentTime).getTime(),
+          driver.Speed,
+        ]);
+      const driverID = driverData[i].DriverID;
+      seriesData.push({
+        type: "spline",
+        name: driverID,
+        data: driverSpeedData,
+      });
+    }
   }
+
+  console.log(seriesData);
 
   const minAndMaxTime = driverData
     .filter((driver) => driver.DriverID === driverData[0].DriverID)
