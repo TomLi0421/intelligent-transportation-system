@@ -54,58 +54,6 @@ def db_connection():
 	
 	return mydb
 
-@application.route('/summary', methods=['GET'])
-def summary():
-    mydb = db_connection()
-    cur = mydb.cursor()
-    sql_query = "select ds.driverId, \
-                    ROUND(AVG(dsd.Speed), 1) AS `AVG Speed`, \
-                    COUNT(dsd.isOverspeed) AS `Overspeed`, \
-                    ds.carPlateNumber, \
-                    ds.overspeedCount, \
-                    ds.overspeedTotalTime, \
-                    ds.fatigueDrivingCount, \
-                    ds.oilLeakDrivingCount, \
-                    ds.hthrottleStopCount, \
-                    ds.neutralSlide_totalTime \
-                from \
-                    comp4442.DriverSpeedData dsd \
-                join \
-                    comp4442.DriverStats ds ON ds.driverId = dsd.driverId \
-		where \
-		    ds.driverId <> '' \
-                group by \
-                    ds.driverId, \
-                    ds.carPlateNumber, \
-                    ds.overspeedCount, \
-                    ds.overspeedTotalTime, \
-                    ds.fatigueDrivingCount, \
-                    ds.oilLeakDrivingCount, \
-                    ds.hthrottleStopCount, \
-                    ds.neutralSlide_totalTime" 
-    
-    cur.execute(sql_query)
-    
-    myresult = cur.fetchall()
-    json_list = []
-
-    for result in myresult:
-        data_dict = {
-            "driverId": result[0],
-            "avgSpeed": result[1],
-            "overspeed": result[2],
-            "carPlateNumber": result[3],
-            "overspeedCount": result[4],
-            "overspeedTotalTime": result[5],
-            "fatigueDrivingCount": result[6],
-            "oilLeakDrivingCount": result[7],
-            "hthrottleStopCount": result[8],
-            "neutralSlide_totalTime": result[9]
-        }
-        json_list.append(data_dict)
-    
-    return jsonify(json_list)
-
 @application.route('/overspeed_history', methods=['GET'])
 def overspeed_history():
     mydb = db_connection()
@@ -175,6 +123,50 @@ def car_speed_monitor():
 
     mydb.close()
 
+    return jsonify(json_list)
+
+@application.route('/summary', methods=['GET'])
+def summary():
+    start_datetime = datetime.strptime("2017-01-01 08:00:00", "%Y-%m-%d %H:%M:%S")
+    global end_datetime
+    mydb = db_connection()
+    cur = mydb.cursor()
+    sql_query = """
+        SELECT 
+            driverId,
+            carPlateNumber,
+            SUM(overspeedCount) as totalOverspeedCount,
+            SUM(overspeedTotalTime) as overspeedTotalTimeCount,
+            SUM(fatigueDrivingCount) as totalFatigueDrivingCount,
+            SUM(oilLeakDrivingCount) as totalOilLeakDrivingCount,
+            SUM(hthrottleStopCount) as totalHthrottleStopCount,
+            SUM(neutralSlide_totalTime) as neutralSlideTotalTimeCount
+        FROM 
+            DriverStats
+        WHERE 
+            CurrentTime BETWEEN %s AND %s
+        GROUP BY 
+            driverId
+    """
+    
+    cur.execute(sql_query, (start_datetime.strftime("%Y-%m-%d %H:%M:%S"), end_datetime.strftime("%Y-%m-%d %H:%M:%S")))
+    
+    myresult = cur.fetchall()
+    json_list = []
+
+    for result in myresult:
+        data_dict = {
+            "driverId": result[0],
+            "carPlateNumber": result[1],
+            "totalOverspeedCount": int(result[2]),
+            "overspeedTotalTimeCount": int(result[3]),
+            "totalFatigueDrivingCount": int(result[4]),
+            "totalOilLeakDrivingCount": int(result[5]),
+            "totalHthrottleStopCount": int(result[6]),
+            "neutralSlideTotalTimeCount": int(result[7])
+        }
+        json_list.append(data_dict)
+    
     return jsonify(json_list)
 
 if __name__ == '__main__':
