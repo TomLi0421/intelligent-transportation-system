@@ -15,6 +15,9 @@ export default function BasicTable() {
 
   useEffect(() => {
     getDriverData();
+    setInterval(() => {
+      getDriverData();
+    }, 30000);
   }, []);
 
   const getDriverData = async () => {
@@ -84,16 +87,16 @@ export default function BasicTable() {
                   </TableCell>
                   <TableCell>{driver.driverId}</TableCell>
                   <TableCell>{driver.carPlateNumber}</TableCell>
-                  <TableCell>{driver.avgSpeed}</TableCell>
-                  <TableCell>{driver.overspeedCount}</TableCell>
+                  <TableCell>{driver.averageSpeed}</TableCell>
+                  <TableCell>{driver.totalOverspeedCount}</TableCell>
                   <TableCell>
                     {(driver.overspeedTotalTime / 60).toFixed(2)}
                   </TableCell>
-                  <TableCell>{driver.fatigueDrivingCount}</TableCell>
-                  <TableCell>{driver.hthrottleStopCount}</TableCell>
-                  <TableCell>{driver.oilLeakDrivingCount}</TableCell>
+                  <TableCell>{driver.totalFatigueDrivingCount}</TableCell>
+                  <TableCell>{driver.totalHthrottleStopCount}</TableCell>
+                  <TableCell>{driver.totalOilLeakDrivingCount}</TableCell>
                   <TableCell>
-                    {(driver.neutralSlide_totalTime / 60).toFixed(2)}
+                    {(driver.neutralSlideTotalTime / 60).toFixed(2)}
                   </TableCell>
                 </TableRow>
               ))}

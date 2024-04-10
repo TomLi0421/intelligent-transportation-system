@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import OverspeedHistoryCard from "./OverspeedHistoryCard";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -5,8 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 function OverspeedHistoryList({ driverData }) {
   const overspeedData = driverData.filter((driver) => driver.IsOverspeed === 1);
 
-  if (overspeedData) {
-    overspeedData.map((driver) =>
+  useEffect(() => {
+    overspeedData.forEach((driver) =>
       toast.error(`${driver.DriverID} is overspeed`, {
         position: "top-right",
         autoClose: 5000,
@@ -18,7 +19,7 @@ function OverspeedHistoryList({ driverData }) {
         theme: "light",
       })
     );
-  }
+  }, [overspeedData]);
 
   return (
     <div className="overflow-auto max-h-[38rem]">
