@@ -87,7 +87,7 @@ export default function BasicTable() {
                   </TableCell>
                   <TableCell>{driver.driverId}</TableCell>
                   <TableCell>{driver.carPlateNumber}</TableCell>
-                  <TableCell>{driver.averageSpeed}</TableCell>
+                  <TableCell>{driver.averageSpeed.toFixed(2)}</TableCell>
                   <TableCell>{driver.totalOverspeedCount}</TableCell>
                   <TableCell>
                     {(driver.overspeedTotalTime / 60).toFixed(2)}
