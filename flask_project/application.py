@@ -133,20 +133,23 @@ def summary():
     cur = mydb.cursor()
     sql_query = """
         SELECT 
-            driverId,
-            carPlateNumber,
-            SUM(overspeedCount) as totalOverspeedCount,
-            SUM(overspeedTotalTime) as overspeedTotalTimeCount,
-            SUM(fatigueDrivingCount) as totalFatigueDrivingCount,
-            SUM(oilLeakDrivingCount) as totalOilLeakDrivingCount,
-            SUM(hthrottleStopCount) as totalHthrottleStopCount,
-            SUM(neutralSlide_totalTime) as neutralSlideTotalTimeCount
+            DriverStats.driverId,
+            DriverStats.carPlateNumber,
+            SUM(DriverStats.overspeedCount) as totalOverspeedCount,
+            SUM(DriverStats.overspeedTotalTime) as overspeedTotalTimeCount,
+            SUM(DriverStats.fatigueDrivingCount) as totalFatigueDrivingCount,
+            SUM(DriverStats.oilLeakDrivingCount) as totalOilLeakDrivingCount,
+            SUM(DriverStats.hthrottleStopCount) as totalHthrottleStopCount,
+            SUM(DriverStats.neutralSlide_totalTime) as neutralSlideTotalTimeCount,
+            AVG(comp4442.DriverSpeedData.Speed) as averageSpeed
         FROM 
             DriverStats
+        JOIN 
+            comp4442.DriverSpeedData ON DriverStats.driverId = comp4442.DriverSpeedData.driverId AND DriverStats.CurrentTime = comp4442.DriverSpeedData.CurrentTime
         WHERE 
-            CurrentTime BETWEEN %s AND %s
+            DriverStats.CurrentTime BETWEEN %s AND %s
         GROUP BY 
-            driverId
+            DriverStats.driverId
     """
     
     cur.execute(sql_query, (start_datetime.strftime("%Y-%m-%d %H:%M:%S"), end_datetime.strftime("%Y-%m-%d %H:%M:%S")))
@@ -159,11 +162,12 @@ def summary():
             "driverId": result[0],
             "carPlateNumber": result[1],
             "totalOverspeedCount": int(result[2]),
-            "overspeedTotalTimeCount": int(result[3]),
+            "overspeedTotalTime": int(result[3]),
             "totalFatigueDrivingCount": int(result[4]),
             "totalOilLeakDrivingCount": int(result[5]),
             "totalHthrottleStopCount": int(result[6]),
-            "neutralSlideTotalTimeCount": int(result[7])
+            "neutralSlideTotalTime": int(result[7]),
+            "averageSpeed": float(result[8])
         }
         json_list.append(data_dict)
     
